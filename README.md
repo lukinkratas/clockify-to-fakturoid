@@ -2,13 +2,17 @@
 
 Simple "purpose build for Colours of Data consultants" automation script, that 1. fetches per month summary of time-entries report. 2. Creates invoice(s) (CZ/UK time -entries separately) and 3. Downloads invoices as pdf locally.
 
-To install dependencies:
+### Prerequisities
+
+  - Fill .env file
+
+  - Install Bun
 
 ```bash
-bun install
+brew install oven-sh/bun/bun
 ```
 
-To run:
+**To run:**
 
 ```bash
 bun run index.ts
