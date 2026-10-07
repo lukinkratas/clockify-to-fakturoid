@@ -20,7 +20,7 @@ async function getParams() {
 
     console.log('Reporting year month in "YYYY-MM?" format:');
     const dateInput = await rl.question(`Or confirm default "${prevMonthStr}" by ENTER.\n`);
-    const dateStr = dateInput ? dateInput : currentMonthStr;
+    const dateStr = dateInput ? dateInput : prevMonthStr;
 
     // parse
     const [rawYear, rawMonth] = dateStr.split("-");
@@ -58,7 +58,6 @@ const clockifySummaryRows = await clockify.generateTimeEntrySummaryReport(
   userId,
   startDay,
   endDay,
-  groups: ["PROJECT"],
 );
 
 const fakturoid = new FakturoidClient(fakturoidClientId, fakturoidClientSecret);

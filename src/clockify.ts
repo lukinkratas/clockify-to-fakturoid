@@ -41,7 +41,6 @@ function toRows(summary: SummaryResponse): SummaryRowEnriched[] {
       durationInHours: duration / 3600,
       countryCode: name.split("-").pop()?.trim().slice(0, 2) ?? "UNKNOWN",
     }))
-    .sort((a, b) => b.durationInHours - a.durationInHours); // longest first
 }
 
 export class ClockifyClient {
@@ -83,9 +82,13 @@ export class ClockifyClient {
         body: JSON.stringify({
           dateRangeStart: `${startDay}T00:00:00.000Z`,
           dateRangeEnd: `${endDay}T23:59:59.999Z`,
-          summaryFilter: groups,
+          summaryFilter: {
+            groups: ["PROJECT"],
+            sortColumn: "DURATION",
+            summaryChartType: "PROJECT"
+          },
           users: { ids: [userId], contains: "CONTAINS", status: "ALL" },
-          amountShown: "HIDE_AMOUNT", // 403: You don't have a permission for that action
+          amountShown: "HIDE_AMOUNT", // otherwise 403: You don't have a permission for that action
         }),
       },
     );
