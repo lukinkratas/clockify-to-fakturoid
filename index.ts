@@ -6,10 +6,23 @@ import { fetchJson, monthRange } from "./src/utils.ts";
 import { ClockifyClient } from "./src/clockify.ts";
 import { FakturoidClient, toLines } from "./src/fakturoid.ts";
 
-// zapisovani raty do .env filu if missing
 // clockify.request() like fakturoid request
 
 const INVOICE_DIR = "invoices";
+const ENV_PATH = ".env";
+
+async function saveEnvVar(key: string, value: string) {
+  const file = Bun.file(ENV_PATH);
+  const text = (await file.exists()) ? (await file.text()).trimEnd() : "";
+  const lines = text ? text.split("\n") : [];
+  const line = `${key}=${value}`;
+
+  const idx = lines.findIndex((l) => l.startsWith(`${key}=`));
+  if (idx === -1) lines.push(line);
+  else lines[idx] = line;
+
+  await Bun.write(ENV_PATH, lines.join("\n") + "\n");
+}
 
 async function getParams() {
   const rl = readline.createInterface({ input, output });
@@ -27,8 +40,11 @@ async function getParams() {
     const year = Number(rawYear);
     const month = Number(rawMonth);
 
-    const rateInput = process.env.RATE?.trim() ?? (await rl.question("Rate: "));
+    const envRate = process.env.RATE?.trim();
+    const rateInput = envRate || (await rl.question("Rate: ")).trim();
     const rate = Number(rateInput);
+
+    if (!envRate) await saveEnvVar("RATE", rateInput);
 
     console.log({ year, month, rate });
     return { year, month, rate };
