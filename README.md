@@ -8,10 +8,6 @@ Simple "purpose build for Colours of Data consultants" automation script, that 1
 
   - Install Bun
 
-```bash
-brew install oven-sh/bun/bun
-```
-
 **To run:**
 
 ```bash
